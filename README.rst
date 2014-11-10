@@ -9,8 +9,9 @@ Requirements
 Runs on Python 3.4
 
 The following non-standard libraries are utilized for some of the functions in this module.
-** BeautifulSoup 4.3.2
-** Requests 2.3
+
+* BeautifulSoup 4.3.2
+* Requests 2.3
 
 How To Use
 ==========
