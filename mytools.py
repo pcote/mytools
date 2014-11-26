@@ -4,6 +4,7 @@ I find myself writing a lot.
 """
 
 from importlib import reload
+from bs4 import BeautifulSoup
 
 def nudir(ob):
     """
@@ -41,6 +42,8 @@ def randomsleep(func):
     :return:
     """
     from functools import wraps
+    from time import sleep
+
     @wraps(func)
     def wrapped_func(*args):
         result = func(*args)
@@ -48,7 +51,7 @@ def randomsleep(func):
         MINTIME, MAXTIME = 3, 8
         sleep_time = random.randrange(MINTIME, MAXTIME)
         print("CALLED {0} WITH ARGS {1} SLEEPING {2} seconds".format(func.__name__, str(args), sleep_time))
-        time.sleep(sleep_time)
+        sleep(sleep_time)
         return result
     return wrapped_func
 
@@ -154,6 +157,13 @@ def loadobject(file_name):
     return ob
 
 
+def make_soup(fname):
+    """
+    Create a simple beautiful soup object out of the filename
+    """
+    with open(fname, "rt", encoding="utf-8") as file_ob:
+        soup = BeautifulSoup(file_ob)
+        return soup
 
 
 def soup_line(dir_name, *exclusions):
@@ -164,7 +174,7 @@ def soup_line(dir_name, *exclusions):
     :return: A tuple containing the soup object and the name of the file used to create it.
     """
     import os
-    from bs4 import BeautifulSoup
+
     from collections import namedtuple
     SoupFilePair = namedtuple("SoupFileName", ["soup", "file_name"])
     is_valid_file = lambda fpath: os.path.isfile(fpath) and fpath.endswith(".html") and fpath not in exclusions
@@ -239,3 +249,13 @@ def extension_finder(directory_name, file_extension):
                 yield "{0}\\{1}".format(directory, file_name)
 
 
+def convert_to_package(dir_name):
+    """
+    Take a directory and it's subfolders and add empty __init__.py files if none were there before.
+    """
+    import os
+    for dir_path, _, file_names in os.walk(dir_name):
+        if "__init__.py" not in file_names:
+            new_file_path = "{}/__init__.py".format(dir_path)
+            with open(new_file_path, "xt", encoding="utf-8"):
+                pass # Just need to create the file.  That is all.
