@@ -5,7 +5,7 @@ I find myself writing a lot.
 
 from importlib import reload
 from bs4 import BeautifulSoup
-
+from contextlib import contextmanager
 
 def nudir(ob):
     """
@@ -262,3 +262,25 @@ def convert_to_package(dir_name):
                 pass # Just need to create the file.  That is all.
 
 
+@contextmanager
+def get_db_context():
+    """
+    Context manager for connecting to a mysql database using credentials set up.
+    Takes care of connection and disconnection to the db on the user's behalf.
+    Configuration is done with an ini file called creds.ini which sits in a config folder.
+    :return: A cursor object.
+    """
+    import pymysql
+    import configparser
+    parser = configparser.ConfigParser()
+    parser.read("config/creds.ini")
+    parser = parser["mysql"]
+    conn = pymysql.connect(user=parser["user"], passwd=parser["pw"], database=parser["db"], host=parser["host"])
+    conn.set_charset("utf8")
+    csr = conn.cursor()
+
+    yield csr
+
+    conn.commit()
+    csr.close()
+    conn.close()
