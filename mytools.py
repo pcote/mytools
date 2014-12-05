@@ -6,6 +6,7 @@ I find myself writing a lot.
 from importlib import reload
 from bs4 import BeautifulSoup
 
+
 def nudir(ob):
     """
     No underscore dir command.
@@ -88,7 +89,7 @@ def download_html_files(list_of_links, target_folder):
         res = requests.get(lnk)
         raw_data = res.text
         file_mode = "wt" if os.path.exists(target_folder) else "xt"
-        with open(target_path, file_mode) as file_ob:
+        with open(target_path, file_mode, encoding="utf-8") as file_ob:
             file_ob.write(raw_data)
 
 
@@ -182,8 +183,8 @@ def soup_line(dir_name, *exclusions):
     for fname in os.listdir(dir_name):
         file_path = "{0}/{1}".format(dir_name, fname)
         if is_valid_file(file_path):
-            file_ob = open(file_path, "rt")
-            soup = BeautifulSoup(file_ob.read())
+            file_ob = open(file_path, "rt", encoding="utf-8")
+            soup = BeautifulSoup(file_ob.read().strip())
             yield SoupFilePair(soup, fname)
 
 
@@ -259,3 +260,5 @@ def convert_to_package(dir_name):
             new_file_path = "{}/__init__.py".format(dir_path)
             with open(new_file_path, "xt", encoding="utf-8"):
                 pass # Just need to create the file.  That is all.
+
+
