@@ -6,6 +6,8 @@ I find myself writing a lot.
 from importlib import reload
 from bs4 import BeautifulSoup
 from contextlib import contextmanager
+import requests
+
 
 def nudir(ob):
     """
@@ -162,6 +164,8 @@ def make_soup(fname):
     """
     Create a simple beautiful soup object out of the filename
     """
+    if fname.startswith("http"):
+        return BeautifulSoup(requests.get(fname).text.encode("utf-8"))
     with open(fname, "rt", encoding="utf-8") as file_ob:
         soup = BeautifulSoup(file_ob)
         return soup
