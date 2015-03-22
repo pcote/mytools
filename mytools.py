@@ -12,8 +12,8 @@ import requests
 def nudir(ob):
     """
     No underscore dir command.
-    :param ob:
-    :return:
+    :param ob: The target object for which to do a dir search on.
+    :return: a list of dir results sans underscore members
     """
     return [att for att in dir(ob) if not att.startswith("_")]
 
