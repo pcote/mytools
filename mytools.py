@@ -186,6 +186,17 @@ def dump_dataset(data_set):
         print()
 
 
+def dump_dict(dct, order=None):
+    iter = dct.items()
+
+    if order == "key":
+        iter = sorted(iter, key=lambda x: tuple(x)[0])
+    if order == "value":
+        iter = sorted(iter, key=lambda x: tuple(x)[1])
+
+    for key, val in iter:
+        print("{} -> {}".format(key, val))
+
 @contextmanager
 def get_db_context():
     """
