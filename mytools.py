@@ -4,7 +4,6 @@ I find myself writing a lot.
 """
 
 from importlib import reload
-from bs4 import BeautifulSoup
 from contextlib import contextmanager
 import requests
 
@@ -221,3 +220,14 @@ def get_db_context():
     conn.commit()
     csr.close()
     conn.close()
+
+def local_get(url):
+    """
+    Shortcut for doing simple localhost get requests on port 5000
+    :param url: The endpoint to call upon
+    :return: A tuple containing the result and the text of that result.
+    """
+    url = url.lstrip("/")
+    local_url = "http://localhost:5000/{}".format(url)
+    res = requests.get(local_url)
+    return res, res.text
